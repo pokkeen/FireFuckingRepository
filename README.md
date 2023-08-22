@@ -1,2 +1,2 @@
 # FireFuckingRepository
-This shit is fire :fire emoji:
+This shit is fire :fire:
