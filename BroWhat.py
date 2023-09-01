@@ -1,6 +1,5 @@
 import discord
 from discord.ext import commands
-from discord.ext import 
 
 intents = discord.Intents.all()
 client = commands.Bot(command_prefix= '!',intents=intents)
