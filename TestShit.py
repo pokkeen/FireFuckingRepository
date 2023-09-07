@@ -51,5 +51,3 @@ def CardEdit(ListName, CardName, NewCardPart, CardPartMod):
     response = requests.request(TrelloAPIurlDict['EditCard'][0], url=TrelloAPIurlDict['EditCard'][1], params=query)
     print(response)
     return
-
-CardEdit('Test','Card2','name','Card2 But cooler')
