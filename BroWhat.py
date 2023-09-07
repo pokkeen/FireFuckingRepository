@@ -1,5 +1,9 @@
 import discord
 from discord.ext import commands
+import TestShit
+
+bro = TestShit.Adder
+print(bro)
 
 intents = discord.Intents.all()
 client = commands.Bot(command_prefix= '!',intents=intents)
@@ -12,3 +16,4 @@ async def on_ready():
 client.load_extension("Commmands.Person_Commands.Test")
 
 client.run('MTEzMjgzNjA4MDI5NTYxMjQ2Ng.Gvpt7j.6WuTOQZQDu9aDOea9LZYfXUnSq5ULzhAz1K638')
+
