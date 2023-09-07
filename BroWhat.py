@@ -1,9 +1,5 @@
 import discord
 from discord.ext import commands
-import TestShit
-
-bro = TestShit.Adder
-print(bro)
 
 intents = discord.Intents.all()
 client = commands.Bot(command_prefix= '!',intents=intents)
