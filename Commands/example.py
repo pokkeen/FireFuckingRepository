@@ -3,7 +3,7 @@ from discord.ext import commands
 
 class Example(commands.Cog):
 
-    def __init__(self, client):
+    def __init__(self, client: commands.Bot):
         self.client = client
 
     @commands.Cog.listener()
@@ -15,5 +15,5 @@ class Example(commands.Cog):
         await ctx.send('Pong!')
 
 async def setup(client):
-    await client.add_cog(ping())
+    await client.add_cog(Example(bot))
         
