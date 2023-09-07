@@ -1,3 +1,10 @@
-import Trello
+import TrelloWrapper
 
-Trello.ListRequest("Test")
+def ShowToDoList():
+    print(TrelloWrapper.CardRequestFromList('To do'))
+    return
+
+ShowToDoList()
+
+
+
