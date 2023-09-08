@@ -12,7 +12,7 @@ TrelloAPIurlDict = {
     'CreateCard' : ['POST', f'https://api.trello.com/1/cards'],
     'DeleteCard' : ['DELETE', f'https://api.trello.com/1/cards/{CardID}'],
     'LabelsFromBoard' : ['GET', f'https://api.trello.com/1/boards/{BoardID}/labels'],
-    'CardsFromBoard' : ['GET', f'https://api.trello.com/1/boards/{BoardID}/cards']
+    'CardsFromBoard' : ['GET', f'https://api.trello.com/1/boards/{BoardID}/cards']  
 }
 query = {
   'key': 'de9199f8a79a551dfdbd82da5bb84aeb',
