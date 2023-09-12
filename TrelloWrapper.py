@@ -21,8 +21,6 @@ query = {
 
 CardParts = ['name', 'desc', 'idLabels', 'idList']
 
-
-
 def ListRequest(ListName):
     response = requests.request(TrelloAPIurlDict['ListsFromBoard'][0], url=TrelloAPIurlDict['ListsFromBoard'][1], params=query)
     print(response)
@@ -30,8 +28,6 @@ def ListRequest(ListName):
         if ListName == Lists['name']:
             ListID = Lists['id']
     return ListID
-
-
 
 def GetLabels(LabelName=None):
     if LabelName == None:
