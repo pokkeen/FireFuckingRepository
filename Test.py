@@ -1,20 +1,11 @@
-import TrelloWrapper
-import requests
+import TrelloWrapperButClasses
+from TrelloWrapperButClasses import ListsDict
+from TrelloWrapperButClasses import CardsDict
+from TrelloWrapperButClasses import LabelsDict
 
-def ShowToDoList():
-    print(TrelloWrapper.CardRequestFromList('To do'))
-    return
+TrelloBoard = TrelloWrapperButClasses.TrelloBoard
 
-ShowToDoList()
+TestBoard = TrelloBoard("Dev ToDo Board", '64f8ad85266330f160f747d7')
 
-class TrelloObject:
-    def __init__(self):
-        self.ObjectID = None
-        self.ObjectName = None
-
-    def testshit(self):
-        self.ObjectID = 1
-
-Obj = TrelloObject()
-
-print(Obj.ObjectID)
+TestBoard.InitalizeBoard()
+CardsDict['Card1'].RemoveLabel(LabelsDict['Claimed'])

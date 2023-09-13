@@ -1,5 +1,4 @@
 import requests
-import json
 
 AuthDict = {
             'key': 'de9199f8a79a551dfdbd82da5bb84aeb',
