@@ -40,13 +40,19 @@ class TrelloList(TrelloObject):
     def __init__(self, Name, ID):
         super().__init__(ID, Name) 
     
-
-
 class TrelloCard(TrelloObject):
     def __init__(self, Name, ID):
         super().__init__(ID, Name)
 
-    def EditCardName(self, Name):
+    def GetCard(self):
+        Response = requests.request(
+            "GET", 
+            url=f'https://api.trello.com/1/cards/{self.ObjectID}',
+            params=AuthDict
+        )
+        print(Response.json())
+
+    def EditName(self,Name):
         AuthDict['name'] = Name
         Response = requests.request(
             "PUT",
@@ -55,53 +61,43 @@ class TrelloCard(TrelloObject):
         )
         print(Response)
     
-    def EditCardDesc(CardID, Desc):
+    def EditDesc(self,Desc):
         AuthDict['desc'] = Desc
         Response = requests.request(
             "PUT",
-            f'https://api.trello.com/1/cards/{CardID}',
-            AuthDict
+            url=f'https://api.trello.com/1/cards/{self.ObjectID}',
+            params=AuthDict
         )
+        print(Response)
     
-    def EditCardLabels(CardID, Label):
-        AuthDict['idLabels'] = Label
+    def AddLabel(self,Label):
+        AuthDict['idLabels'] = Label.ObjectID
         Response = requests.request(
             "PUT",
-            f'https://api.trello.com/1/cards/{CardID}',
-            AuthDict
+            url=f'https://api.trello.com/1/cards/{self.ObjectID}',
+            params=AuthDict
         )
+        print(Response)
+    
+    def RemoveLabel(self,Label):
+        Response = requests.request(
+            "DELETE",
+            url=f'https://api.trello.com/1/cards/{self.ObjectID}/idLabels/{Label.ObjectID}',
+            params=AuthDict
+        )
+        print(Response)
 
-    def MoveCard(CardID, ListID):
+    def Move(self,ListID):
         AuthDict['idList'] = ListID
         Response = requests.request(
             "PUT",
-            f'https://api.trello.com/1/cards/{CardID}',
-            AuthDict
+            url=f'https://api.trello.com/1/cards/{self.ObjectID}',
+            params=AuthDict
         )
+        print(Response)
+        print(Response.json())
 
 class TrelloLabel(TrelloObject):
     def __init__(self, Name, ID):
         super().__init__(ID, Name)
 
-class testClass():
-    def __init__(self):
-        self.Fuck = None
-        return
-    
-    def NewClass(self):
-        Filler = testClass()
-        return Filler
-
-cals = testClass()
-NewThing = cals.NewClass()
-NewThing.Fuck = "Frick"
-print(NewThing.Fuck)
-
-TestBoard = TrelloBoard("Dev ToDo Board", '64f8ad85266330f160f747d7')
-
-TestBoard.InitalizeBoard()
-print(CardsDict)
-print(ListsDict)
-print(LabelsDict)
-
-CardsDict['Card1'].EditCardName('Fuck YOU suck my fucking nuts you little n-x')

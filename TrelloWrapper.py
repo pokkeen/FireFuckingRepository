@@ -79,6 +79,7 @@ def CardEdit(CardName, NewCardPart=CardParts, CardPartMod=None):
         CardPartMod = ListRequest(CardPartMod)
     query[NewCardPart] = CardPartMod
     response = requests.request(TrelloAPIurlDict['EditCard'][0], url=TrelloAPIurlDict['EditCard'][1], params=query)
+    print(response)
     return response
 
 
@@ -94,3 +95,5 @@ def CardRequestFromList(ListName, CardName=None):
         if CardName == Cards['name']:
             CardID = Cards['id']
     return CardID, CardList
+
+CardEdit('Card1','idLabels', None)
