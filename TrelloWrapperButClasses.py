@@ -38,10 +38,13 @@ class TrelloBoard(TrelloObject):
 class TrelloList(TrelloObject):
     def __init__(self, Name, ID):
         super().__init__(ID, Name) 
+    def __str__(self):
+        return self.ObjectName
     
 class TrelloCard(TrelloObject):
     def __init__(self, Name, ID):
         super().__init__(ID, Name)
+    
 
     def GetCard(self):
         Response = requests.request(
