@@ -8,12 +8,12 @@ class Example(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print('Bot is online')
+        await print('Bot is online')
 
     @commands.command()
     async def ping(self, ctx):
         await ctx.send('Pong!')
 
 async def setup(client):
-    await client.add_cog(Example(bot))
+    await client.add_cog(Example(client))
         
