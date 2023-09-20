@@ -29,13 +29,24 @@ class DevCommands(commands.Cog):
     async def AddToDo(self, interaction:discord.Interaction, todoname:str, tododesc:str):
         response = requests.get(f'https://api.blox.link/v4/public/guilds/964609612496142416/discord-to-roblox/441389433061638155',  headers={"Authorization" : 'a91fa14d-c868-48b9-af94-73b60a08561f'})
         print(response.json())
-        hyperlink_format = '<a href="{link}">{text}</a>'
-        link_text = hyperlink_format.format
-        link_text(link='https://www.roblox.com/home', text='roblos')
-        name = f"Person's Hunts | {todoname}"
-        desc = f'{tododesc} | updated by {link_text} on {date.date.today()}'
+        #Put roclient here
+        name = f'{todoname} | created by {UserName}'
+        desc = f'{tododesc} | created by {Put} on {date.date.today()}'
         ListsDict['Test2'].CreateCard(name,desc)
         await interaction.response.send_message(content=f'Created card {todoname}')
+    
+    @AddToDo.error
+    async def AddToDoError():
+        return
+    
+    @app_commands.command(name='claimtodo', description='Claims a to do on the trello')
+    @app_commands.describe(cardname='Claim a card!')
+    async def ClaimToDo(self, interaction:discord.Interaction, cardname:str):
+        return
+    
+    @app_commands.command(name='displaytodo', description='Displays the to do list')
+    async def DisplayToDo(self, interaction:discord.Interaction):
+        
 
 
 async def setup(client):
