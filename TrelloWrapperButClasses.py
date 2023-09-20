@@ -49,6 +49,18 @@ class TrelloList(TrelloObject):
             params=AuthDict
             )
         print(Response)
+
+    def GetListCards(self):
+        CardList = []
+        Response = requests.request(
+            'GET',
+            url=f'https://api.trello.com/1/lists/{self.ObjectID}/cards',
+            params=AuthDict
+        )
+        for cards in Response.json():
+            CardList.append(cards['name'])
+        return CardList
+
     
 class TrelloCard(TrelloObject):
     def __init__(self, Name, ID):
