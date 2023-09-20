@@ -38,8 +38,17 @@ class TrelloBoard(TrelloObject):
 class TrelloList(TrelloObject):
     def __init__(self, Name, ID):
         super().__init__(ID, Name) 
-    def __str__(self):
-        return self.ObjectName
+    
+    def CreateCard(self, Name=None, Desc=None):
+        AuthDict['idList'] = self.ObjectID
+        AuthDict['name'] = Name
+        AuthDict['desc'] = Desc
+        Response = requests.request(
+            "POST",
+            url=f'https://api.trello.com/1/cards',
+            params=AuthDict
+            )
+        print(Response)
     
 class TrelloCard(TrelloObject):
     def __init__(self, Name, ID):
