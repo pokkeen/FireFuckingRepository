@@ -38,7 +38,7 @@ class TrelloBoard:
         print('Label does not exist')
     
     def CreateCard(self, Name=None, Desc=None, List=None):
-        AuthDict['idList'] = self.GetBoardList(List)
+        AuthDict['idList'] = self.GetBoardList(List)['id']
         AuthDict['name'] = Name
         AuthDict['desc'] = Desc
         Response = requests.request("POST",url=f'https://api.trello.com/1/cards',params=AuthDict)
@@ -49,7 +49,7 @@ class TrelloBoard:
         CardList = []
         Response = requests.request('GET',url=f'https://api.trello.com/1/lists/{ID}/cards',params=AuthDict)
         for cards in Response.json():
-            CardList.append(cards['name'])
+            CardList.append(cards)
         print(Response)
         return CardList
     
