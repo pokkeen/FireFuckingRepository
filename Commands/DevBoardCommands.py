@@ -6,10 +6,6 @@ from roblox import Client
 from discord.ext import commands
 from discord import app_commands
 
-def is_in_guild(ctx):
-    return ctx.guild.id == 964609612496142416
-
-
 TrelloBoard = TrelloWrapperButClasses.TrelloBoard
 date = datetime
 RoClient = Client()
