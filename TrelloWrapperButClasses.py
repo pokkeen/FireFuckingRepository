@@ -15,7 +15,7 @@ class TrelloBoard:
         Response = requests.request('GET',url=f'https://api.trello.com/1/boards/{self.ID}/cards',params=AuthDict)
         print(Response)
         for Card in Response.json():
-            if Card['name'].split(' | ')[0] == CardName:
+            if Card['name'].split(' | ')[0] == CardName or Card['name'] == CardName:
                 return Card
         print('Card does not exist')
 
