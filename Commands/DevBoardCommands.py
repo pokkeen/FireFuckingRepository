@@ -30,7 +30,6 @@ class DevCommands(commands.Cog):
         if tododesc == None or todoname == None:
             Error = ErrorHandler()
             await interaction.response.send_message(content=Error)
-        
         response = requests.get(f'https://api.blox.link/v4/public/guilds/964609612496142416/discord-to-roblox/441389433061638155',  headers={"Authorization" : 'a91fa14d-c868-48b9-af94-73b60a08561f'})
         ID = response.json()['robloxID']
         User =  f'https://www.roblox.com/users/{ID}/profile'
@@ -60,6 +59,11 @@ class DevCommands(commands.Cog):
         for tasks in ToDoBoard.GetListCards('To do'):
             ebed.add_field(name=tasks['name'], value=tasks['desc'], inline=False)
         await interaction.response.send_message(embed=ebed)
+
+    @app_commands.command(name='printguildid',description='bro what')
+    async def What(self, interaction:discord.Interaction):
+        fuck = interaction.guild_id
+        await interaction.response.send_message(content=fuck)
         
 
 

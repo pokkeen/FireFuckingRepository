@@ -7,11 +7,9 @@ class Example(commands.Cog):
     def __init__(self, client: commands.Bot):
         self.client = client
 
-    #@commands.command()
-    #async def ping(self, ctx):
-       # response = requests.get(f'https://api.blox.link/v4/public/guilds/964609612496142416/discord-to-roblox/441389433061638155',  headers={"Authorization" : 'a91fa14d-c868-48b9-af94-73b60a08561f'})
-       #   print(response.json()['robloxID'])
-     #   await ctx.send(ctx.guild.id)
+    @commands.command()
+    async def ping(self, ctx):
+        await ctx.send('hi')
 
     @app_commands.command(name='color', description='nah')
     @app_commands.describe(color = 'fuck uhm')
