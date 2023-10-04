@@ -10,7 +10,7 @@ TrelloBoard = TrelloWrapperButClasses.TrelloBoard
 date = datetime
 RoClient = Client()
 
-ToDoBoard = TrelloBoard("Dev ToDo Board", '64f8ad85266330f160f747d7')
+ToDoBoard = TrelloBoard("FRR_DEV", '64f8ad85266330f160f747d7')
 
 def ErrorHandler(interaction):
     if interaction.guild_id != 'Put ID here':
