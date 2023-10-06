@@ -1,79 +1,113 @@
-import TrelloWrapperButClasses
+import TrelloWrapper
 import datetime
 import requests
 import discord
+import time
 from roblox import Client
 from discord.ext import commands
 from discord import app_commands
 
-TrelloBoard = TrelloWrapperButClasses.TrelloBoard
+
+
 date = datetime
 RoClient = Client()
 
-ToDoBoard = TrelloBoard("FRR_DEV", '64f8ad85266330f160f747d7')
+ToDoBoard = TrelloWrapper.TrelloBoard("FRR_DEV", '64f8ad85266330f160f747d7')
 
-def ErrorHandler(interaction):
-    if interaction.guild_id != 'Put ID here':
+def ErrorHandler(interaction, data, task=None):
+    if interaction.guild_id != 964609612496142416 and data[0] == True:
         return 'Wrong Guild'
-    pass
+    if ToDoBoard.GetBoardList(interaction.user.name) != None and data[1] == True:
+        return 'You already have a claim list'
+    if data[2] == True:
+        if ToDoBoard.GetBoardCard(task) == None:
+            return "Task doesn't exist"
+    if ToDoBoard.GetBoardList(interaction.user.name) == None and data[3] == True:
+        return "You don't have a claim list yet"
+    if data[4] == True:
+        if ToDoBoard.GetBoardCard(task)['idList'] != ToDoBoard.GetBoardList('To do')['id'] and ToDoBoard.GetBoardCard(task)['idList'] != ToDoBoard.GetBoardList(interaction.user.name)['id']:
+            return "This task is already claimed or finished"
+    return None
 
 class DevCommands(commands.Cog):
 
     def __init__(self, client: commands.Bot):
         self.client = client
-
-    @app_commands.command(name='addtodo', description='Adds to the to do list on the trello')
-    @app_commands.describe(todoname='Select a name for the problem', tododesc='Put a description of the problem')
-    async def AddToDo(self, interaction:discord.Interaction, todoname:str, tododesc:str):
-        Error = ErrorHandler(interaction)
+    
+    @app_commands.command(name='add_task', description='Adds a tasks to the to do list')
+    @app_commands.describe(taskname='Name the task', taskdesc='Describe the task', tasktype='What type of task is it')
+    @app_commands.choices(tasktype=[app_commands.Choice(name='Building', value='Building'),app_commands.Choice(name='Modeling',value='Modeling'),app_commands.Choice(name='Scripting',value='Scripting')])
+    async def add_task(self, interaction:discord.Interaction, taskname:str, taskdesc:str, tasktype: app_commands.Choice[str]):
+        Error = ErrorHandler(interaction,[True,False,False,False,False])
         if Error != None:
             await interaction.response.send_message(content=Error)
-        response = requests.get(f'https://api.blox.link/v4/public/guilds/{interaction.guild_id}/discord-to-roblox/441389433061638155',  headers={"Authorization" : 'a91fa14d-c868-48b9-af94-73b60a08561f'})
-        ID = response.json()['robloxID']
-        User =  f'https://www.roblox.com/users/{ID}/profile'
-        UserName = await RoClient.get_user(ID)
-        name = f'{todoname} | created by {UserName.name}'
-        desc = f'{tododesc} | created by {User} on {date.date.today()}'
-        ToDoBoard.CreateCard(name,desc,'To do')
-        await interaction.response.send_message(content=f'Created card {todoname}')
+            return
+        Response = requests.request('GET', url=f'https://api.blox.link/v4/public/guilds/{interaction.guild_id}/discord-to-roblox/{interaction.user.id}', headers={"Authorization" : '34710271-b935-4c85-bc21-2b4c44d8cacf'})
+        ID = Response.json()['robloxID']
+        Username = await RoClient.get_user(ID)
+        name, desc = f'{taskname} | created by {Username.name}', f'{taskdesc} | created on {date.date.today()}'
+        ToDoBoard.CreateCard(name,desc,'To do',tasktype.value)
+        time.sleep(1.5)
+        await interaction.response.send_message(content=f'Created card {taskname}')
 
-    @app_commands.command(name='claimtodo', description='Claims a to do on the trello')
-    @app_commands.describe(cardname='Claim a card!')
-    async def ClaimToDo(self, interaction:discord.Interaction, cardname:str):
-        Error = ErrorHandler(interaction)
+    @app_commands.command(name='add_dev',description='Makes you a claim list on the Trello')
+    async def add_dev(self, interaction:discord.Interaction):
+        Error = ErrorHandler(interaction, [True,True,False,False,False])
         if Error != None:
             await interaction.response.send_message(content=Error)
-        if ToDoBoard.GetBoardCard(cardname)['name'] not in ToDoBoard.GetListCards('To do'):
-            await interaction.response.send_message(content='That card is not in the todo list')
-        response = requests.get(f'https://api.blox.link/v4/public/guilds/{interaction.guild_id}/discord-to-roblox/441389433061638155',  headers={"Authorization" : 'a91fa14d-c868-48b9-af94-73b60a08561f'})
-        ID = response.json()['robloxID']
-        User =  f'https://www.roblox.com/users/{ID}/profile'
-        UserName = await RoClient.get_user(ID)
-        OldDesc = ToDoBoard.GetBoardCard(cardname)['desc']
-        NewDesc = f'{OldDesc} \nclaimed by {User}'
-        ToDoBoard.EditCardDesc(NewDesc, cardname)
-        await interaction.response.send_message(content=f'Card Claimed!')
+            return
+        ToDoBoard.CreateList(f'Claim List | {interaction.user.name}')
+        time.sleep(1.5)
+        await interaction.response.send_message(content='List Created!')
 
-    @app_commands.command(name='displaytodo', description='Displays the to do list')
+    @app_commands.command(name='claim_task', description='Claim a task and put it on your task list')
+    @app_commands.describe(taskname='Name the Task you wanna claim')
+    async def claim_task(self, interaction:discord.Interaction, taskname:str):
+        Error = ErrorHandler(interaction, [True,False,True,True,True], taskname)
+        if Error != None:
+            await interaction.response.send_message(content=Error)
+            return
+        ToDoBoard.Move(taskname,interaction.user.name)
+        time.sleep(1.5)
+        await interaction.response.send_message(content='Task claimed')
+    
+    @app_commands.command(name='finish_task', description='Set the task as done')
+    async def finish_task(self, interaction:discord.Interaction, taskname:str):
+        Error = ErrorHandler(interaction, [True,False,True,True,True], taskname)
+        if Error != None:
+            await interaction.response.send_message(content=Error)
+            return
+        ToDoBoard.Move(taskname,'Done')
+        time.sleep(1.5)
+        await interaction.response.send_message(content='Task completed')
+    
+    @app_commands.command(name='display_tasks', description='Displays the to do list')
     async def DisplayToDo(self, interaction:discord.Interaction):
-        Error = ErrorHandler(interaction)
+        Error = ErrorHandler(interaction, [True,False,False,False,False])
         if Error != None:
             await interaction.response.send_message(content=Error)
-        ebed = discord.Embed(title='To do list for devs', description='The to do list')
+        ebed = discord.Embed(title='Task list', description="It's a task list")
         for tasks in ToDoBoard.GetListCards('To do'):
-            ebed.add_field(name=tasks['name'], value=tasks['desc'], inline=False)
+            labels = tasks['labels'][0]['name']
+            desc = tasks['desc']
+            ebed.add_field(name=tasks['name'], value=f'Type:{labels} \n{desc}', inline=False)
         await interaction.response.send_message(embed=ebed)
 
-    @app_commands.command(name='printguildid',description='bro what')
-    async def What(self, interaction:discord.Interaction):
-        Error = ErrorHandler(interaction)
+    @app_commands.command(name='display_claims', description='Displays your personal task list')
+    async def DisplayToDo(self, interaction:discord.Interaction):
+        Error = ErrorHandler(interaction, [True,False,False,False,False])
         if Error != None:
             await interaction.response.send_message(content=Error)
-        fuck = interaction.guild_id
-        await interaction.response.send_message(content=fuck)
-        
-
+        ebed = discord.Embed(title='Task list', description="It's a task list")
+        for tasks in ToDoBoard.GetListCards(interaction.user.name):
+            labels = tasks['labels'][0]['name']
+            desc = tasks['desc']
+            ebed.add_field(name=tasks['name'], value=f'Type:{labels} \n{desc}', inline=False)
+        await interaction.response.send_message(embed=ebed)
 
 async def setup(client):
     await client.add_cog(DevCommands(client))
-    
+
+
+
+
