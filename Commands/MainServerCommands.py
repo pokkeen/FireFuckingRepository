@@ -1,9 +1,9 @@
 import discord
-import TrelloWrapperButClasses
+import TrelloWrapper
 from discord.ext import commands
 from discord import app_commands
 
-MainBoard = TrelloWrapperButClasses.TrelloBoard('FRR_MAIN','651d6fb8c277694097949b22')
+MainBoard = TrelloWrapper.TrelloBoard('FRR_MAIN','651d6fb8c277694097949b22')
 
 
 class MainCommands(commands.Cog):
@@ -16,13 +16,21 @@ class MainCommands(commands.Cog):
     async def add_points(self, interaction: discord.Interaction, person:str):
         pass
 
-    #Subtract points
+"""
+    Things I want for this bot:
 
-    #Show points
-
-    #Promote
-
-    #Demote
+    Main Commands (Cross Server For Most Part):
+    
+        - Add Hunt (Cross Server)
+        - Announce (Cross server)
+        - Apply (For what? Who knows) (Cross Server)
+        - Myth (Main Only)
+        - Schedule (Main only maybe)
+        - Promote/Demote (Main only maybe)
+        - Show hunts (Main Only Maybe)
+        
+"""
+    
 
     
 
