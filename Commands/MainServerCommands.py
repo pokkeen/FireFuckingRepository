@@ -11,10 +11,17 @@ class MainCommands(commands.Cog):
     def __init__(self, client: commands.Bot):
         self.client = client
 
-    @app_commands.command(name='add_points', description='add points to someone')
+    @app_commands.command(name='add_hunts', description='Add a hunt to someone')
     @app_commands.describe(person= 'Put person in here')
     async def add_points(self, interaction: discord.Interaction, person:str):
         pass
+    
+    @app_commands.command(name='announce', description='Announce some shit!')
+    async def announce(self, interaction:discord.Interaction):
+        pass
+
+
+
 
 """
     Things I want for this bot:

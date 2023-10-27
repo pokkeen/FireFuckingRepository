@@ -4,6 +4,9 @@ AuthDict = {
             'key': 'de9199f8a79a551dfdbd82da5bb84aeb',
             'token' : 'ATTA38d848682569db14b6bb4c05aa318b5f16ab9853736bc8cdb24a4630faf55f43428EB0F2'
 }
+Headers = {
+  "Accept": "application/json"
+}
 
 class TrelloBoard:
     def __init__(self, ObjectName, ObjectID):
@@ -22,7 +25,7 @@ class TrelloBoard:
 
 # DO NOT DELETE IMPORTANT FUNCTION IF DELETED REST OF CLASS BREAKS
     def GetBoardList(self, ListName):
-        Response = requests.request('GET',url=f'https://api.trello.com/1/boards/{self.ID}/lists',params=AuthDict)
+        Response = requests.request('GET',url=f'https://api.trello.com/1/boards/{self.ID}/lists',headers=Headers,params=AuthDict)
         print(Response)
         for List in Response.json():
             if ListName in List['name'].split(' | '):
@@ -45,31 +48,30 @@ class TrelloBoard:
         AuthDict['name'] = Name
         AuthDict['desc'] = Desc
         AuthDict['idLabels'] = self.GetBoardLabel(Label)['id']
-        Response = requests.request("POST",url=f'https://api.trello.com/1/cards',params=AuthDict)
+        Response = requests.request("POST",url=f'https://api.trello.com/1/cards',headers=Headers,params=AuthDict)
         print(Response)
     
     def GetListCards(self, List=None):
         ID = self.GetBoardList(List)['id']
-        Response = requests.request('GET',url=f'https://api.trello.com/1/lists/{ID}/cards',params=AuthDict)
+        Response = requests.request('GET',url=f'https://api.trello.com/1/lists/{ID}/cards',headers=Headers,params=AuthDict)
         return Response.json()
           
-    
     def EditCardName(self,Name=None,Card=None):
         ID = self.GetBoardCard(Card)['id']
         AuthDict['name'] = Name
-        Response = requests.request("PUT",url=f'https://api.trello.com/1/cards/{ID}',params=AuthDict)
+        Response = requests.request("PUT",url=f'https://api.trello.com/1/cards/{ID}',headers=Headers,params=AuthDict)
         print(Response)
 
     def EditCardDesc(self,Desc=None,Card=None):
         ID = self.GetBoardCard(Card)['id']
         AuthDict['desc'] = Desc
-        Response = requests.request("PUT",url=f'https://api.trello.com/1/cards/{ID}',params=AuthDict)
+        Response = requests.request("PUT",url=f'https://api.trello.com/1/cards/{ID}',headers=Headers,params=AuthDict)
         print(Response)
 
     def AddLabel(self, Card=None, Label=None):
         ID = self.GetBoardCard(Card)
         AuthDict['idLabels'] = self.GetBoardLabel(Label)['id']
-        Response = requests.request("PUT",url=f'https://api.trello.com/1/cards/{ID}',params=AuthDict)
+        Response = requests.request("PUT",url=f'https://api.trello.com/1/cards/{ID}',headers=Headers,params=AuthDict)
         print(Response)
     
     def RemoveLabel(self,Card=None, Label=None):
@@ -81,7 +83,7 @@ class TrelloBoard:
     def Move(self,Card=None, List=None):
         ID = self.GetBoardCard(Card)['id']
         AuthDict['idList'] = self.GetBoardList(List)['id']
-        Response = requests.request("PUT",url=f'https://api.trello.com/1/cards/{ID}',params=AuthDict)
+        Response = requests.request("PUT",url=f'https://api.trello.com/1/cards/{ID}',headers=Headers,params=AuthDict)
         print(Response)
 
     def CreateList(self, Name=None):

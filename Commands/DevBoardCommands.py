@@ -22,8 +22,11 @@ def ErrorHandler(interaction, data, task=None):
     if ToDoBoard.GetBoardList(interaction.user.name) == None and data[3] == True:
         return "You don't have a claim list yet"
     if data[4] == True:
-        if ToDoBoard.GetBoardCard(task)['idList'] != ToDoBoard.GetBoardList('To do')['id'] and ToDoBoard.GetBoardCard(task)['idList'] != ToDoBoard.GetBoardList(interaction.user.name)['id']:
+        if ToDoBoard.GetBoardCard(task)['idList'] != ToDoBoard.GetBoardList('To do')['id']:
             return "This task is already claimed or finished"
+    if data[5] == True:
+        if ToDoBoard.GetBoardCard(task)['idList'] != ToDoBoard.GetBoardList(interaction.user.name)['id']:
+            return 
     return None
 
 class DevCommands(commands.Cog):
@@ -35,7 +38,7 @@ class DevCommands(commands.Cog):
     @app_commands.describe(taskname='Name the task', taskdesc='Describe the task', tasktype='What type of task is it')
     @app_commands.choices(tasktype=[app_commands.Choice(name='Building', value='Building'),app_commands.Choice(name='Modeling',value='Modeling'),app_commands.Choice(name='Scripting',value='Scripting')])
     async def add_task(self, interaction:discord.Interaction, taskname:str, taskdesc:str, tasktype: app_commands.Choice[str]):
-        Error = ErrorHandler(interaction,[True,False,False,False,False])
+        Error = ErrorHandler(interaction,[True,False,False,False,False,False])
         if Error != None:
             await interaction.response.send_message(content=Error)
             return
@@ -49,7 +52,7 @@ class DevCommands(commands.Cog):
 
     @app_commands.command(name='add_dev',description='Makes you a claim list on the Trello')
     async def add_dev(self, interaction:discord.Interaction):
-        Error = ErrorHandler(interaction, [True,True,False,False,False])
+        Error = ErrorHandler(interaction, [True,True,False,False,False,False])
         if Error != None:
             await interaction.response.send_message(content=Error)
             return
@@ -59,7 +62,7 @@ class DevCommands(commands.Cog):
     @app_commands.command(name='claim_task', description='Claim a task and put it on your task list')
     @app_commands.describe(taskname='Name the Task you wanna claim')
     async def claim_task(self, interaction:discord.Interaction, taskname:str):
-        Error = ErrorHandler(interaction, [True,False,True,True,True], taskname)
+        Error = ErrorHandler(interaction, [True,False,True,True,True,False], taskname)
         if Error != None:
             await interaction.response.send_message(content=Error)
             return
@@ -68,7 +71,7 @@ class DevCommands(commands.Cog):
     
     @app_commands.command(name='finish_task', description='Set the task as done')
     async def finish_task(self, interaction:discord.Interaction, taskname:str):
-        Error = ErrorHandler(interaction, [True,False,True,True,True], taskname)
+        Error = ErrorHandler(interaction, [True,False,True,True,False,True], taskname)
         if Error != None:
             await interaction.response.send_message(content=Error)
             return
@@ -77,7 +80,7 @@ class DevCommands(commands.Cog):
     
     @app_commands.command(name='display_tasks', description='Displays the to do list')
     async def DisplayToDo(self, interaction:discord.Interaction):
-        Error = ErrorHandler(interaction, [True,False,False,False,False])
+        Error = ErrorHandler(interaction, [True,False,False,False,False,False])
         if Error != None:
             await interaction.response.send_message(content=Error)
         ebeder = discord.Embed(title='Task list', description="It's a task list")
@@ -89,9 +92,8 @@ class DevCommands(commands.Cog):
 
     @app_commands.command(name='display_claims', description='Displays your personal task list')
     async def DisplayClaims(self, interaction:discord.Interaction):
-        Error = ErrorHandler(interaction, [True,False,False,False,False])
-        if Error != None:
-            await interaction.response.send_message(content=Error)
+        if ErrorHandler(interaction, [True,False,False,False,False,False]) != None:
+            await interaction.response.send_message(content=ErrorHandler(interaction, [True,False,False,False,False,False]))
         ebed = discord.Embed(title='YOUR Task list', description="It's YOUR task list")
         for tasks in ToDoBoard.GetListCards(interaction.user.name):
             labels = tasks['labels'][0]['name']
