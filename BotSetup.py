@@ -19,7 +19,7 @@ class Client(commands.Bot):
 
 client = Client()
 
-client.run('MTEzMjgzNjA4MDI5NTYxMjQ2Ng.Gvpt7j.6WuTOQZQDu9aDOea9LZYfXUnSq5ULzhAz1K638')
+client.run('[Private]')
 
 
 
