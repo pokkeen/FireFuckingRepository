@@ -1,8 +1,8 @@
 import requests
 
 AuthDict = {
-            'key': 'de9199f8a79a551dfdbd82da5bb84aeb',
-            'token' : 'ATTA38d848682569db14b6bb4c05aa318b5f16ab9853736bc8cdb24a4630faf55f43428EB0F2'
+            'key': '[Private]',
+            'token' : '[Private]'
 }
 Headers = {
   "Accept": "application/json"
